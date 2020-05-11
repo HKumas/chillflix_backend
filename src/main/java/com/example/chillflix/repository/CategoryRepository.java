@@ -8,4 +8,5 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllByNameIgnoreCase(String name);
     Category findOneByNameIgnoreCase(String name);
+    List<Category> findByOrderById();
 }

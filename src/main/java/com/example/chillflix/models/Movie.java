@@ -20,10 +20,16 @@ public class Movie {
     private String title;
     private  String description;
     private Integer year;
-    private Integer rating;
+    private Double rating;
+    private Integer raterTotal;
     private String url;
     @ManyToOne
     private Category category;
+
+    public Movie() {
+        this.rating = 0.00;
+        this.raterTotal = 0;
+    }
 
     public long getId() {
         return id;
@@ -57,14 +63,6 @@ public class Movie {
         this.year = year;
     }
 
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -75,6 +73,22 @@ public class Movie {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public Integer getRaterTotal() {
+        return raterTotal;
+    }
+
+    public void setRaterTotal(Integer raterTotal) {
+        this.raterTotal = raterTotal;
     }
 
     public void setCategory(Category category) {

@@ -10,4 +10,5 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     List<Movie> findAllByYear(Integer year);
     Movie findOneByTitleIgnoreCase(String title);
     List<Movie> findAllByCategoryId(Long id);
+    List<Movie> findByOrderByCategoryId();
 }

@@ -7,6 +7,7 @@ import com.example.chillflix.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +20,8 @@ public class MovieController {
     private CategoryRepository categoryRepository;
 
     @GetMapping
-    public List<Movie> getAllMovies(){
-        return this.movieRepository.findAll();
+    public List<Movie> getAllMoviesOrderByTitle(){
+        return this.movieRepository.findByOrderByCategoryId();
     }
 
     @GetMapping("/{id}")
@@ -39,16 +40,17 @@ public class MovieController {
 
     @GetMapping("/category")
     public List<Movie> getMoviesByCategory(@RequestParam("id") Long id){
+
         return movieRepository.findAllByCategoryId(id);
     }
 
     @PostMapping
-    public Long addMovie(@RequestBody Movie movie) {
+    public Movie addMovie(@RequestBody Movie movie) {
         Movie existingMovie = movieRepository.findOneByTitleIgnoreCase(movie.getTitle());
         if(existingMovie != null) {
-            return existingMovie.getId();
+            return existingMovie;
         }
-        return movieRepository.save(movie).getId();
+        return movieRepository.save(movie);
     }
     @DeleteMapping("/{id}")
     public void deleteMovie(@PathVariable Long id) {
@@ -59,5 +61,15 @@ public class MovieController {
     public void updateMovie(@PathVariable("id") Long id,  @RequestBody Movie movie){
         movie.setId(id);
         movieRepository.save(movie);
+    }
+
+    @PutMapping("/rate/{id}")
+    public Movie rateMovie(@PathVariable("id") Long id,  @RequestBody Movie movie, @RequestParam("currentRate") Double currentRate){
+        Double newRating = (movie.getRating() * movie.getRaterTotal() + currentRate) / (movie.getRaterTotal()+1);
+        newRating = (int)(Math.round(newRating * 10))/10.0;
+        movie.setRating(newRating);
+        movie.setRaterTotal(movie.getRaterTotal() + 1);
+        movie.setId(id);
+       return movieRepository.save(movie);
     }
 }

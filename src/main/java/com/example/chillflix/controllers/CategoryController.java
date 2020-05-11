@@ -17,20 +17,22 @@ public class CategoryController {
     private CategoryRepository categoryRepository;
 
     @GetMapping
-    public List<Category> getCategories(){
-        return this.categoryRepository.findAll();
+    public List<Category> getCategoriesOrderedByName(){
+        return this.categoryRepository.findByOrderById();
     }
+
     @GetMapping("/{id}")
-    public Category getCategories (@PathVariable Long id){
+    public Category getCategory (@PathVariable Long id){
         return categoryRepository.getOne(id);
     }
+
     @PostMapping
-    public Long addCategory(@RequestBody Category category) {
+    public Category addCategory(@RequestBody Category category) {
         Category existingCategory = categoryRepository.findOneByNameIgnoreCase(category.getName());
         if(existingCategory != null) {
-            return existingCategory.getId();
+            return existingCategory;
         }
-        return categoryRepository.save(category).getId();
+        return categoryRepository.save(category);
     }
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable Long id) {
